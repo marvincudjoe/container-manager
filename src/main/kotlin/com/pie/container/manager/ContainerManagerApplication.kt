@@ -7,7 +7,5 @@ import org.springframework.boot.runApplication
 class ContainerManagerApplication
 
 fun main(args: Array<String>) {
-    runApplication<ContainerManagerApplication>(*args) {
-        //setLogStartupInfo(false) todo: uncomment this line in the future
-    }
+    runApplication<ContainerManagerApplication>(*args) {}
 }

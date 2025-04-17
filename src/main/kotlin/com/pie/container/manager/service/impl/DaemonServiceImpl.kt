@@ -35,6 +35,7 @@ class DaemonServiceImpl {
     fun sendRequest(req: DockerHttpClient.Request, reference: String): DefaultResponse {
         var response = DefaultResponse()
         runCatching {
+            logger.info("Sending request to Daemon: ${req.method()} ${req.path()}")
             httpClient.execute(req).apply {
                 response = handelResponseStatus(this, URI(reference))
                 if (response.status.isError) {

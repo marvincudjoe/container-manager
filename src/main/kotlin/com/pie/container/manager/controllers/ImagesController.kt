@@ -25,6 +25,7 @@ class ImagesController(private val imagesService: ImagesService) {
         @RequestParam(required = false, defaultValue = "false") sharedSize: Boolean,
         @Parameter(description = "Show digest information as a `RepoDigests` field on each image")
         @RequestParam(required = false, defaultValue = "false") digests: Boolean
+        // TODO: filters query param is not implemented/Doesn't work as expected
     ): ResponseEntity<DefaultResponse> = response { imagesService.listImages(all, filters, sharedSize, digests) }
 
     @PostMapping

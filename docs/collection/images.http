@@ -1,0 +1,5 @@
+### Show images.
+GET {{baseUrl}}/images/json?all=true
+
+### Only images from a final layer (no children) are shown.
+GET {{baseUrl}}/images/json?all=false

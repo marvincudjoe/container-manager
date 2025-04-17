@@ -1,0 +1,10 @@
+### Get all networks
+GET {{baseUrl}}/networks
+
+###
+POST {{baseUrl}}/networks
+Content-Type: Application/json
+
+{
+  "name": "network-name"
+}
