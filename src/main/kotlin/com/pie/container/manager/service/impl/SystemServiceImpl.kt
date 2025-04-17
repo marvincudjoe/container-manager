@@ -14,9 +14,8 @@ class SystemServiceImpl : SystemService {
 
     private var daemonService = DaemonServiceImpl()
 
-    override fun pingDaemon() {
+    override fun pingDaemon(): DefaultResponse =
         daemonService.sendRequest(setGetRequest("_ping"), DockerEngineApiReferences.System.PING_HEAD)
-    }
 
     override fun version(): DefaultResponse =
         daemonService.sendRequest(setGetRequest("version"), DockerEngineApiReferences.System.VERSION)

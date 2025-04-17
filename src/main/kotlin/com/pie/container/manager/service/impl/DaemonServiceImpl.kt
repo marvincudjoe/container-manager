@@ -1,5 +1,7 @@
 package com.pie.container.manager.service.impl
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientConfig
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
@@ -7,10 +9,10 @@ import com.github.dockerjava.transport.DockerHttpClient
 import com.github.dockerjava.transport.DockerHttpClient.Response
 import com.pie.container.manager.model.DefaultResponse
 import com.pie.container.manager.utils.logger
-import com.pie.container.manager.utils.toJson
 import org.springframework.boot.json.JsonParseException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import java.io.InputStream
 import java.net.URI
 import java.time.Duration
 
@@ -46,7 +48,7 @@ class DaemonServiceImpl {
             logger.error("Caught ${ex.javaClass} with reason: ${ex.message}")
             response = if (ex is RuntimeException) {
                 DefaultResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR, body = "RuntimeException: ${ex.message}"
+                    HttpStatus.INTERNAL_SERVER_ERROR, body = "Docker Daemon may not be running. Reason: ${ex.message}"
                 )
             } else {
                 DefaultResponse(
@@ -60,10 +62,20 @@ class DaemonServiceImpl {
     fun handelResponseStatus(response: Response, dockerApiReference: URI): DefaultResponse {
         val status = HttpStatus.valueOf(response.statusCode)
         val body = try {
-            response.body.toJson()
+            response.body.toJsonNode()
         } catch (_: JsonParseException) {
             logger.error("Unable to parse response: ${response.body}")
         }
         return DefaultResponse(status, dockerApiReference, body)
+    }
+
+    private fun InputStream.toJsonNode(): JsonNode {
+        val data = this.bufferedReader().use { it.readText() }
+        return try {
+            ObjectMapper().readTree(data)
+        } catch (e: Exception) {
+            // Not a valid JSON, return as is
+            ObjectMapper().createObjectNode().put("message", data)
+        }
     }
 }
