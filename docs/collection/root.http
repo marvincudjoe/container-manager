@@ -1,2 +1,9 @@
 ###
 GET {{baseUrl}}
+
+> {%
+  client.test("Response has text", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+    client.assert(response.body.includes("Welcome to container-manager"), "Response body does not contain the expected text");
+  });
+%}
