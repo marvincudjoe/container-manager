@@ -42,11 +42,11 @@ class ContainersServiceImpl : ContainersService {
     override fun startContainer(id: String, detachKeys: String): DefaultResponse {
         return if (detachKeys.isEmpty()) {
             daemonService.sendRequest(
-                setPostRequest("$PREFIX/$id/start"), DockerEngineApiReferences.Containers.START
+                setPostRequest("$PREFIX/$id/start", null), DockerEngineApiReferences.Containers.START
             )
         } else {
             daemonService.sendRequest(
-                setPostRequest("$PREFIX/$id/start?detachKeys=$detachKeys"),
+                setPostRequest("$PREFIX/$id/start?detachKeys=$detachKeys", null),
                 DockerEngineApiReferences.Containers.START
             )
         }
@@ -54,19 +54,19 @@ class ContainersServiceImpl : ContainersService {
 
     override fun stopContainer(id: String, signal: String, t: Int): DefaultResponse {
         return daemonService.sendRequest(
-            setPostRequest("$PREFIX/$id/stop?signal=$signal&t=$t"), DockerEngineApiReferences.Containers.STOP
+            setPostRequest("$PREFIX/$id/stop?signal=$signal&t=$t", null), DockerEngineApiReferences.Containers.STOP
         )
     }
 
     override fun restartContainer(id: String, signal: String, t: Int): DefaultResponse {
         return daemonService.sendRequest(
-            setPostRequest("$PREFIX/$id/restart?signal=$signal&t=$t"), DockerEngineApiReferences.Containers.RESTART
+            setPostRequest("$PREFIX/$id/restart?signal=$signal&t=$t", null), DockerEngineApiReferences.Containers.RESTART
         )
     }
 
     override fun deleteStoppedContainers(filters: String): DefaultResponse {
         return daemonService.sendRequest(
-            setPostRequest("$PREFIX/prune$filters"), DockerEngineApiReferences.Containers.CONTAINER_PRUNE
+            setPostRequest("$PREFIX/prune$filters", null), DockerEngineApiReferences.Containers.CONTAINER_PRUNE
         )
     }
 }

@@ -13,11 +13,19 @@ fun setGetRequest(path: String): DockerHttpClient.Request {
     return DockerHttpClient.Request.builder().method(DockerHttpClient.Request.Method.GET).path("/$path").build()
 }
 
-fun setPostRequest(path: String, body: JsonNode = ObjectMapper().createObjectNode()): DockerHttpClient.Request {
+fun <T> setPostRequest(path: String, body: T? = null): DockerHttpClient.Request {
+    val requestBody: Any
+    if (body is JsonNode) {
+        requestBody = body
+    } else if (body != null){
+        requestBody = ObjectMapper().writeValueAsString(body)
+    } else {
+        requestBody = ObjectMapper().createObjectNode()
+    }
     return DockerHttpClient.Request.builder()
         .method(DockerHttpClient.Request.Method.POST)
         .putHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString())
-        .body(body.toString().byteInputStream())
+        .body(requestBody.toString().byteInputStream())
         .path("/$path").build()
 }
 

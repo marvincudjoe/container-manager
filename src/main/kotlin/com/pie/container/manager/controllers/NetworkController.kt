@@ -33,4 +33,8 @@ class NetworkController(private val networksService: NetworksService) {
             defaultValue = ""
         ) scope: String
     ): ResponseEntity<DefaultResponse> = response { networksService.inspectANetwork(id, verbose, scope) }
+
+    @PostMapping
+    fun createNetwork(@RequestBody body: CreateNetwork
+    ): ResponseEntity<DefaultResponse> = response { networksService.createNetwork(body) }
 }
