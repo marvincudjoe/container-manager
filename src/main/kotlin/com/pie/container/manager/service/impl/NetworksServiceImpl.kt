@@ -13,14 +13,14 @@ class NetworksServiceImpl : NetworksService {
 
     override fun listNetworks(filters: String): DefaultResponse {
         return daemonService.sendRequest(
-            setGetRequest("networks?filters=$filters"), DockerEngineApiReferences.Networks.NETWORK_LIST
+            setGetRequest("networks?filters=$filters"), DockerEngineApiReferences.Networks.LIST
         )
     }
 
     override fun inspectANetwork(id: String, verbose: Boolean, scope: String): DefaultResponse {
         return daemonService.sendRequest(
             setGetRequest("networks/$id?verbose=$verbose&scope$scope"),
-            DockerEngineApiReferences.Networks.NETWORK_INSPECT
+            DockerEngineApiReferences.Networks.INSPECT
         )
     }
 }
