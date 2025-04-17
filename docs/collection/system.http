@@ -1,0 +1,5 @@
+###
+GET {{baseUrl}}/daemon/_ping
+
+###
+GET {{baseUrl}}/daemon/version
