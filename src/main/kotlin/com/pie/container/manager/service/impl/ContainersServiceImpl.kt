@@ -11,14 +11,11 @@ import org.springframework.stereotype.Service
 /**
  * @see ContainersService
  */
+private const val PREFIX: String = "containers"
+
 @Service
-class ContainersServiceImpl : ContainersService {
+class ContainersServiceImpl(val daemonService: DaemonServiceImpl) : ContainersService {
 
-    companion object {
-        private const val PREFIX: String = "containers"
-    }
-
-    private var daemonService = DaemonServiceImpl()
     override fun listContainers(all: Boolean, limit: Int, size: Boolean, filters: String): DefaultResponse {
         return daemonService.sendRequest(
             setGetRequest("$PREFIX/json?all=$all&limit=$limit&size=$size&filters=$filters"),

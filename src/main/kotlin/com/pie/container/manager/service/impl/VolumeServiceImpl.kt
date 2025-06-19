@@ -7,9 +7,7 @@ import com.pie.container.manager.utils.setGetRequest
 import org.springframework.stereotype.Service
 
 @Service
-class VolumeServiceImpl : VolumeService {
-
-    private var daemonService = DaemonServiceImpl()
+class VolumeServiceImpl(val daemonService: DaemonServiceImpl) : VolumeService {
 
     override fun listVolumes(filters: String): DefaultResponse {
         return daemonService.sendRequest(

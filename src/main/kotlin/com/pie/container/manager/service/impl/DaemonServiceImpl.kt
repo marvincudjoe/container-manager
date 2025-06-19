@@ -3,7 +3,6 @@ package com.pie.container.manager.service.impl
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.dockerjava.core.DefaultDockerClientConfig
-import com.github.dockerjava.core.DockerClientConfig
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
 import com.github.dockerjava.transport.DockerHttpClient
 import com.github.dockerjava.transport.DockerHttpClient.Response
@@ -21,18 +20,12 @@ private const val RESPONSE_TIMEOUT = 6000L // time waiting for a response after 
 
 @Service
 class DaemonServiceImpl {
-    private final val config: DockerClientConfig
-    private final val httpClient: ApacheDockerHttpClient
-
-    init {
-        config = DefaultDockerClientConfig.createDefaultConfigBuilder().build()
-        httpClient =
-            ApacheDockerHttpClient.Builder()
-                .dockerHost(config.dockerHost)
-                .connectionTimeout(Duration.ofMillis(CONNECTION_TIMEOUT))
-                .responseTimeout(Duration.ofMillis(RESPONSE_TIMEOUT))
-                .build()
-    }
+    private final val config = DefaultDockerClientConfig.createDefaultConfigBuilder().build()
+    private final val httpClient: ApacheDockerHttpClient = ApacheDockerHttpClient.Builder()
+        .dockerHost(config.dockerHost)
+        .connectionTimeout(Duration.ofMillis(CONNECTION_TIMEOUT))
+        .responseTimeout(Duration.ofMillis(RESPONSE_TIMEOUT))
+        .build()
 
     fun sendRequest(req: DockerHttpClient.Request, reference: String): DefaultResponse {
         var response = DefaultResponse()
@@ -48,7 +41,7 @@ class DaemonServiceImpl {
             logger.error("Caught ${ex.javaClass} with reason: ${ex.message}")
             response = if (ex is RuntimeException) {
                 DefaultResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR, body = "Docker Daemon may not be running. Reason: ${ex.message}"
+                    HttpStatus.INTERNAL_SERVER_ERROR, body = "${HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase}. Reason: ${ex.message}"
                 )
             } else {
                 DefaultResponse(
@@ -73,7 +66,7 @@ class DaemonServiceImpl {
         val data = this.bufferedReader().use { it.readText() }
         return try {
             ObjectMapper().readTree(data)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Not a valid JSON, return as is
             ObjectMapper().createObjectNode().put("message", data)
         }

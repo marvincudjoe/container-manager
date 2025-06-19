@@ -9,9 +9,7 @@ import com.pie.container.manager.utils.setPostRequest
 import org.springframework.stereotype.Service
 
 @Service
-class NetworksServiceImpl : NetworksService {
-
-    private var daemonService = DaemonServiceImpl()
+class NetworksServiceImpl(val daemonService: DaemonServiceImpl) : NetworksService {
 
     override fun listNetworks(filters: String): DefaultResponse {
         return daemonService.sendRequest(

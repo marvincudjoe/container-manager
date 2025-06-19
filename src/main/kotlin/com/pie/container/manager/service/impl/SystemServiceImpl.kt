@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service
  * @see SystemService
  */
 @Service
-class SystemServiceImpl : SystemService {
-
-    private var daemonService = DaemonServiceImpl()
+class SystemServiceImpl(val daemonService: DaemonServiceImpl) : SystemService {
 
     override fun pingDaemon(): DefaultResponse =
         daemonService.sendRequest(setGetRequest("_ping"), DockerEngineApiReferences.System.PING_HEAD)

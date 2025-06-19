@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service
 private const val PREFIX: String = "images"
 
 @Service
-class ImagesServiceImpl : ImagesService {
-    private var daemonService = DaemonServiceImpl()
+class ImagesServiceImpl(val daemonService: DaemonServiceImpl) : ImagesService {
 
     override fun listImages(all: Boolean, filters: String, sharedSize: Boolean, digests: Boolean): DefaultResponse =
         daemonService.sendRequest(
