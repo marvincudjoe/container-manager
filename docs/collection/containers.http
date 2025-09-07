@@ -1,2 +1,39 @@
+@containerName = test-postgres-db-{{$timestamp}}
+
 ### List Containers
 GET {{baseUrl}}/containers/json?all=false&limit=1&size=true
+
+### Inspect Container
+GET {{baseUrl}}/containers/{{containerId}}/json
+
+### Stop Container
+POST {{baseUrl}}/containers/{{containerId}}/stop
+
+### Create Containers
+POST {{baseUrl}}/containers/create?name={{containerName}}
+Content-Type: application/json
+
+{
+  "Image": "{{imageName}}:{{imageTag}}",
+  "Env": [
+    "ALLOW_EMPTY_PASSWORD=yes"
+  ],
+  "HostConfig": {
+    "PortBindings": {
+      "5432/tcp": [
+        {
+          "HostPort": "5432"
+        }
+      ]
+    }
+  }
+}
+
+
+> {%
+    client.test("Container created", function () {
+        client.assert(response.status === 201, "Response status is not 201");
+        client.global.set("containerId", jsonPath(response.body, '$.body.Id'));
+        client.log("global variable, containerId, is set to: " + client.global.get("containerId"));
+    });
+%}
