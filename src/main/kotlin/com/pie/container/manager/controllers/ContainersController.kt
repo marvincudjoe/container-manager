@@ -5,7 +5,6 @@ import com.pie.container.manager.model.DefaultResponse
 import com.pie.container.manager.model.response
 import com.pie.container.manager.service.ContainersService
 import io.swagger.v3.oas.annotations.Parameter
-import jakarta.validation.constraints.Pattern
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -35,7 +34,7 @@ class ContainersController(private val containersService: ContainersService) {
     fun createContainer(
         @Parameter(description = "Assign the specified name to the container. Must match `/?[a-zA-Z0-9][a-zA-Z0-9_.-]+`.")
         @RequestParam(required = false, defaultValue = "") name: String,
-        @Pattern(regexp = "^/?[a-zA-Z0-9][a-zA-Z0-9_.-]+\$")
+        //       TODO Create custom validator for @Pattern(regexp = "^/?[a-zA-Z0-9][a-zA-Z0-9_.-]+\$")
         @Parameter(description = "Platform in the format `os[/arch[/variant]]` used for image lookup.")
         @RequestParam(required = false, defaultValue = "") platform: String,
         @RequestBody jsonPayload: JsonNode

@@ -28,9 +28,17 @@ class ImagesController(private val imagesService: ImagesService) {
         // TODO: filters query param is not implemented/Doesn't work as expected
     ): ResponseEntity<DefaultResponse> = response { imagesService.listImages(all, filters, sharedSize, digests) }
 
-    @PostMapping
-    fun createImage(@RequestBody payload: JsonNode): ResponseEntity<DefaultResponse> =
-        response { imagesService.createImage(payload) }
+    @PostMapping("create")
+    fun createImage(
+        @RequestParam(required = false, defaultValue = "") fromImage: String,
+        @RequestParam(required = false, defaultValue = "") fromSrc: String,
+        @RequestParam(required = false, defaultValue = "") repo: String,
+        @RequestParam(required = false, defaultValue = "") tag: String,
+        @RequestBody(required = false) payload: JsonNode
+    ): ResponseEntity<DefaultResponse> =
+    // TODO this is incomplete, see docker API docs
+        // TODO handle large images (Could send a response straight away then ping in the background)
+        response { imagesService.createImage(fromImage, fromSrc, repo, tag, payload) }
 
     @DeleteMapping("{name}")
     fun removeAnImage(
