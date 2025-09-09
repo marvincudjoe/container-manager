@@ -26,7 +26,8 @@ repositories {
 object Versions {
     const val KOTLIN_VERSION = "2.0.0"
     const val GOOGLE_GUAVA = "33.0.0-jre"
-    const val DOCKER_JAVA_VERSION = "3.3.6"
+    const val DOCKER_JAVA_VERSION = "3.6.0"
+    const val DOCKER_TRANSPORT_VERSION = "3.4.0"
     const val SPRING_VERSION = "3.3.1"
     const val SPRING_DOC_VERSION = "2.5.0"
 }
@@ -45,7 +46,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("com.github.docker-java:docker-java:${Versions.DOCKER_JAVA_VERSION}")
-    implementation("com.github.docker-java:docker-java-transport-httpclient5:${Versions.DOCKER_JAVA_VERSION}")
+    // TODO Investigate NoClassDefFoundError on version 3.6.0 of docker-java-transport-httpclient5
+    implementation("com.github.docker-java:docker-java-transport-httpclient5:${Versions.DOCKER_TRANSPORT_VERSION}")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:${Versions.SPRING_VERSION}")
 }
