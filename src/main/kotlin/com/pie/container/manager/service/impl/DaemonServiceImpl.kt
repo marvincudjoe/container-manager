@@ -23,6 +23,7 @@ class DaemonServiceImpl {
     private final val config = DefaultDockerClientConfig.createDefaultConfigBuilder().build()
     private final val httpClient: ApacheDockerHttpClient = ApacheDockerHttpClient.Builder()
         .dockerHost(config.dockerHost)
+        .sslConfig(config.sslConfig)
         .connectionTimeout(Duration.ofMillis(CONNECTION_TIMEOUT))
         .responseTimeout(Duration.ofMillis(RESPONSE_TIMEOUT))
         .build()
@@ -41,7 +42,8 @@ class DaemonServiceImpl {
             logger.error("Caught ${ex.javaClass} with reason: ${ex.message}")
             response = if (ex is RuntimeException) {
                 DefaultResponse(
-                    HttpStatus.INTERNAL_SERVER_ERROR, body = "${HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase}. Reason: ${ex.message}"
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    body = "${HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase}. Reason: ${ex.message}"
                 )
             } else {
                 DefaultResponse(

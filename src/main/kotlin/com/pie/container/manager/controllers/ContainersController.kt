@@ -61,8 +61,7 @@ class ContainersController(private val containersService: ContainersService) {
             hidden = true
         )
         @RequestParam(required = false, defaultValue = "") detachKeys: String
-    ): ResponseEntity<DefaultResponse> =
-        response { containersService.startContainer(id, detachKeys) }
+    ): ResponseEntity<DefaultResponse> = response { containersService.startContainer(id, detachKeys) }
 
     @PostMapping("{id}/stop")
     fun stopContainer(

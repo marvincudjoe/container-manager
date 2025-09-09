@@ -2,6 +2,7 @@ package com.pie.container.manager.service.impl
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.pie.container.manager.model.DefaultResponse
+import com.pie.container.manager.model.endpointNotImplemented
 import com.pie.container.manager.service.ContainersService
 import com.pie.container.manager.utils.DockerEngineApiReferences
 import com.pie.container.manager.utils.setGetRequest
@@ -37,16 +38,11 @@ class ContainersServiceImpl(val daemonService: DaemonServiceImpl) : ContainersSe
     }
 
     override fun startContainer(id: String, detachKeys: String): DefaultResponse {
-        return if (detachKeys.isEmpty()) {
-            daemonService.sendRequest(
-                setPostRequest("$PREFIX/$id/start", null), DockerEngineApiReferences.Containers.START
-            )
-        } else {
-            daemonService.sendRequest(
-                setPostRequest("$PREFIX/$id/start?detachKeys=$detachKeys", null),
-                DockerEngineApiReferences.Containers.START
-            )
-        }
+        // TODO fix "message": "starting container with non-empty request body was deprecated since API v1.22 and removed in v1.24"
+//        return daemonService.sendRequest(
+//            setPostRequest("$PREFIX/$id/start?$detachKeys", null), DockerEngineApiReferences.Containers.START
+//        )
+        return endpointNotImplemented(DockerEngineApiReferences.Containers.START)
     }
 
     override fun stopContainer(id: String, signal: String, t: Int): DefaultResponse {
@@ -57,7 +53,8 @@ class ContainersServiceImpl(val daemonService: DaemonServiceImpl) : ContainersSe
 
     override fun restartContainer(id: String, signal: String, t: Int): DefaultResponse {
         return daemonService.sendRequest(
-            setPostRequest("$PREFIX/$id/restart?signal=$signal&t=$t", null), DockerEngineApiReferences.Containers.RESTART
+            setPostRequest("$PREFIX/$id/restart?signal=$signal&t=$t", null),
+            DockerEngineApiReferences.Containers.RESTART
         )
     }
 
