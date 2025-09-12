@@ -1,4 +1,4 @@
-@containerName = test-postgres-db-{{$timestamp}}
+@containerName = container-manager-test-db-{{$timestamp}}
 
 ### List Containers
 GET {{baseUrl}}/containers/json?all=false&limit=1&size=true
@@ -6,10 +6,18 @@ GET {{baseUrl}}/containers/json?all=false&limit=1&size=true
 ### Inspect Container
 GET {{baseUrl}}/containers/{{containerId}}/json
 
+### Start Container
+POST {{baseUrl}}/containers/{{containerId}}/start
+Content-Type: application/json
+
+
 ### Stop Container
 POST {{baseUrl}}/containers/{{containerId}}/stop
 
 ### Create Containers
+# Note: The image referenced must exist.
+# See the /images/create endpoint.
+
 POST {{baseUrl}}/containers/create?name={{containerName}}
 Content-Type: application/json
 

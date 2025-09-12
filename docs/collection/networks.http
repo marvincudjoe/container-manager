@@ -6,5 +6,5 @@ POST {{baseUrl}}/networks
 Content-Type: Application/json
 
 {
-  "name": "network-name"
+  "name": "container-manager-test-network-{{$timestamp}}"
 }
